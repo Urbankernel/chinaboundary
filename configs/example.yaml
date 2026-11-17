@@ -1,0 +1,36 @@
+# chinaboundary 配置示例
+# 用法：复制本文件为 configs/config.yaml，按需修改参数后运行 `chinaboundary run`
+#   cp configs/example.yaml configs/config.yaml     # Linux / macOS
+#   copy configs\example.yaml configs\config.yaml   # Windows
+#   chinaboundary run                               # 默认读取 configs/config.yaml
+#   chinaboundary run -c 其他路径.yaml              # 或指定配置文件
+#
+# 说明：本文件是「配置驱动运行」的入口，所有抓取参数都在这里设置；
+#       也可不经配置文件，直接用命令行参数指定（此时不读本文件，
+#       以内置默认配置 + 命令行参数运行）：
+#   chinaboundary run --name 广东省 --depth 1 --format geojson,gpkg
+
+# ---------- 目标区域 ----------
+# level: country              # country / province / city / district；level=country 时无需 name/adcode（会被忽略）
+name: 山东省               # 行政区名称（与 adcode 二选一）；可逗号分隔多个：name: 山东省,河北省
+# adcode: 440000             # 6 位行政区编码（如 440000 / 440100 / 440106，与 name 二选一）；可逗号分隔多个：adcode: 370000,130000
+depth: 0                    # 下钻层级数：0=本级，1=直接子级，2=孙级（如省 -> 市 -> 区县）
+children_only: false        # 仅获取下钻出的子级、不含本级轮廓（需 depth >= 1）
+
+# ---------- 输出 ----------
+format: geojson             # 输出格式：geojson / gpkg / shp；多选用逗号分隔，如 geojson,gpkg
+
+outputs:
+  dir: runs                 # 输出根目录，每次运行生成 runs/<时间戳>_<名称>/
+
+# ---------- 请求 ----------
+request:
+  timeout: 15.0             # 单请求超时（秒）
+  max_retries: 5            # 最大重试次数（网络异常 / 429 / 5xx）
+  retry_base: 1.0           # 指数退避基数（秒）：等待 = base * 2^n + 随机抖动
+
+# ---------- 缓存 ----------
+cache:
+  enabled: true             # 是否启用本地响应缓存（避免重复请求）
+  dir: null                 # null -> 默认 ~/.cache/chinaboundary
+  ttl_hours: 168            # 缓存有效期（小时），0 表示不过期

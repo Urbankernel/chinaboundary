@@ -1,0 +1,2 @@
+# gpkg / shp 导出所需（GeoJSON 导出无需此依赖）
+geopandas>=0.14

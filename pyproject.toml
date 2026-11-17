@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chinaboundary"
+version = "0.1.0"
+description = "中国行政区边界数据获取工具：从 DataV.GeoAtlas 按需获取国/省/市/区县四级边界，输出 GeoJSON / GeoPackage / Shapefile，坐标系为 WGS-84。"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["geojson", "china", "boundary", "admin-division", "geopandas", "wgs-84", "datav"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests>=2.28",
+    "PyYAML>=6.0",
+    "shapely>=2.0",
+]
+
+[project.optional-dependencies]
+export = ["geopandas>=0.14"]
+
+[project.scripts]
+chinaboundary = "chinaboundary.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
